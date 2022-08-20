@@ -1,0 +1,20 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: balloon-capacity
+spec:
+  parallelism: 4
+  backoffLimit: 0
+  template:
+    spec:
+      priorityClassName: balloon-priority
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["sleep"]
+        args: ["36000"]
+        resources:
+            requests:
+              cpu: "16"
+      restartPolicy: Never
