@@ -1,0 +1,19 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: prewarm
+spec:
+  parallelism: 1000
+  backoffLimit: 0
+  template:
+    spec:
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["sleep"]
+        args: ["3600"]
+        resources:
+            requests:
+              cpu: 250m
+      restartPolicy: Never
