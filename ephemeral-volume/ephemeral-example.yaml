@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ephemeral-example
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: example-pod
+  strategy:
+    type: Recreate      
+  template:
+    metadata:
+      labels:
+        pod: example-pod
+    spec:
+      containers:
+        - name: busybox-container
+          image: busybox
+          command: [ "sleep", "infinity" ]
+          resources:
+            requests:
+              cpu: 500m
+              ephemeral-storage: 2Gi
+              memory: 2Gi
+          volumeMounts:
+          - mountPath: "/scratch"
+            name: scratch-volume
+      volumes:
+        - name: scratch-volume
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  type: scratch-volume
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: "ssd"
+                resources:
+                  requests:
+                    storage: 1Ti
