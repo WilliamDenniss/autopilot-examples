@@ -3,6 +3,7 @@ kind: StorageClass
 metadata:
   name: ssd
 provisioner: pd.csi.storage.gke.io
+reclaimPolicy: Delete
 volumeBindingMode: WaitForFirstConsumer
 allowVolumeExpansion: true
 parameters:
