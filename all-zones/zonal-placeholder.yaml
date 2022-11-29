@@ -1,0 +1,78 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder-zone-a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: placeholder-zone-a-pod
+  template:
+    metadata:
+      labels:
+        pod: placeholder-zone-a-pod
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-a"      
+      containers:
+        - name: ubuntu-container
+          image: ubuntu
+          command: ["sleep"]
+          args: ["infinity"]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 250Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder-zone-b
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: placeholder-zone-b-pod
+  template:
+    metadata:
+      labels:
+        pod: placeholder-zone-b-pod
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-b"      
+      containers:
+        - name: ubuntu-container
+          image: ubuntu
+          command: ["sleep"]
+          args: ["infinity"]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 250Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: placeholder-zone-c
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: placeholder-zone-c-pod
+  template:
+    metadata:
+      labels:
+        pod: placeholder-zone-c-pod
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-c"      
+      containers:
+        - name: ubuntu-container
+          image: ubuntu
+          command: ["sleep"]
+          args: ["infinity"]
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+              ephemeral-storage: 10Mi
