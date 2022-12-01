@@ -1,0 +1,71 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: placeholder-job-zone-a
+spec:
+  parallelism: 1
+  backoffLimit: 0
+  template:
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-a"
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["sleep"]
+        args: ["18000"]
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 10Mi
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: placeholder-job-zone-b
+spec:
+  parallelism: 1
+  backoffLimit: 0
+  template:
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-b"
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["sleep"]
+        args: ["18000"]
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 10Mi
+      restartPolicy: Never
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: placeholder-job-zone-c
+spec:
+  parallelism: 1
+  backoffLimit: 0
+  template:
+    spec:
+      nodeSelector:
+        topology.kubernetes.io/zone: "us-west1-c"
+      terminationGracePeriodSeconds: 0
+      containers:
+      - name: ubuntu-container
+        image: ubuntu
+        command: ["sleep"]
+        args: ["18000"]
+        resources:
+          requests:
+            cpu: 250m
+            memory: 512Mi
+            ephemeral-storage: 10Mi
+      restartPolicy: Never
