@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: writer
+spec:
+  selector:
+    matchLabels:
+      ds: writer-pod
+  template:
+    metadata:
+      labels:
+        ds: writer-pod
+    spec:
+      tolerations:
+      - key: group
+        operator: Equal
+        value: "read_writer_pair"
+        effect: NoSchedule
+      nodeSelector:
+        group: "read_writer_pair"  
+      containers:
+      - image: "k8s.gcr.io/pause"
+        name: reader-container
+        resources:
+          requests:
+            cpu: "1"

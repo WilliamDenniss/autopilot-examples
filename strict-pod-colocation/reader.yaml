@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: reader
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      pod: reader-pod
+  template:
+    metadata:
+      labels:
+        pod: reader-pod
+    spec:
+      tolerations:
+      - key: group
+        operator: Equal
+        value: "read_writer_pair"
+        effect: NoSchedule
+      nodeSelector:
+        group: "read_writer_pair"
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: pod
+                operator: In
+                values:
+                - reader-pod
+            topologyKey: "kubernetes.io/hostname"        
+      containers:
+      - name: reader-container
+        image: "k8s.gcr.io/pause"
+        resources:
+          requests:
+            cpu: "1"
