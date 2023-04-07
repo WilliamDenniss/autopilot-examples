@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-arm
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-arm
+  template:
+    metadata:
+      labels:
+        app: nginx-arm
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Scale-Out
+        kubernetes.io/arch: arm64
+      containers:
+      - name: nginx-arm
+        image: nginx
+        resources:
+          requests:
+            cpu: 2000m
+            memory: 2Gi
+
