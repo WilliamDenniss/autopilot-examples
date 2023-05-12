@@ -6,11 +6,11 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: timeserver-pod
+      pod: n2d-milan-pod
   template:
     metadata:
       labels:
-        pod: timeserver-pod
+        pod: n2d-milan-pod
     spec:
       nodeSelector:
         cloud.google.com/compute-class: Balanced

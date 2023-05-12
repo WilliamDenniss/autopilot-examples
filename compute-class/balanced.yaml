@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: n2d
+  name: balanced
 spec:
   replicas: 1
   selector:
     matchLabels:
-      pod: n2d-pod
+      pod: balanced-pod
   template:
     metadata:
       labels:
-        pod: n2d-pod
+        pod: balanced-pod
     spec:
       nodeSelector:
         cloud.google.com/compute-class: Balanced
-        supported-cpu-platform.cloud.google.com/AMD_Rome: "true"
       containers:
       - name: timeserver-container
         image: docker.io/wdenniss/timeserver:1
