@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: generic
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: generic-pod
+  template:
+    metadata:
+      labels:
+        pod: generic-pod
+    spec:
+      containers:
+      - name: timeserver-container
+        image: nginx
+        resources:
+          requests:
+            cpu: "4"
