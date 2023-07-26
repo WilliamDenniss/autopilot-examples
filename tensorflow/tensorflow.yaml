@@ -15,7 +15,7 @@ spec:
         pod: tensorflow-pod
     spec:
       nodeSelector:
-        cloud.google.com/gke-accelerator: nvidia-tesla-a100
+        cloud.google.com/gke-accelerator: nvidia-tesla-t4
         cloud.google.com/gke-spot: "true"
       terminationGracePeriodSeconds: 30
       containers:
