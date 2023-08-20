@@ -1,11 +1,11 @@
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: balloon-priority
+  name: placeholder-priority
 value: -10
 preemptionPolicy: Never
 globalDefault: false
-description: "Balloon pod priority."
+description: "Placeholder Pod priority."
 ---
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
@@ -14,4 +14,4 @@ metadata:
 value: 0
 preemptionPolicy: PreemptLowerPriority
 globalDefault: true
-description: "The global default priority. Will preempt the balloon pods."
+description: "The global default priority. Will preempt the placeholder Pods."

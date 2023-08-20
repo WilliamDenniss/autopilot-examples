@@ -1,13 +1,13 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: balloon-capacity
+  name: placeholder-capacity
 spec:
   parallelism: 4
   backoffLimit: 0
   template:
     spec:
-      priorityClassName: balloon-priority
+      priorityClassName: placeholder-priority
       terminationGracePeriodSeconds: 0
       containers:
       - name: ubuntu-container
