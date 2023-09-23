@@ -1,0 +1,21 @@
+# Isolate this namespace, preventing communication to Pods in other namespaces while allowing internet traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: isolate-namespace-egress
+spec:
+  # Apply to all pods in this namespace
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    # Allow Pod traffic to own namespace
+    - podSelector: {}
+    # Allow traffic to internet (but not internal network)
+    - ipBlock:
+        cidr: '0.0.0.0/0'
+        except: ['10.0.0.0/8']
+    # Allow traffic to specific cloud service
+    - ipBlock:
+        cidr: '10.123.182.3/32' # Cloud SQL server

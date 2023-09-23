@@ -1,0 +1,17 @@
+# Isolate this namespace, preventing communication from Pods in other namespaces while allowing internet traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: isolate-namespace-ingress
+spec:
+  # Apply to all pods in this namespace
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    # Allow Pod traffic from own namespace
+    - podSelector: {}
+    # Allow all non-Pod traffic
+    - ipBlock:
+        cidr: '0.0.0.0/0'
