@@ -1,0 +1,19 @@
+# Allow traffic to the timeserver service Pods in the namespace named 'non-isolated'
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-timeserver-egress
+spec:
+  # Apply to all pods in this namespace
+  podSelector: {}
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    # allow traffic to pod: timeserver-pod in ns non-isolated
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: non-isolated
+      podSelector:
+        matchLabels:
+          pod: timeserver-pod

@@ -1,0 +1,16 @@
+# Allow traffic to the timeserver service Pods
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-timeserver-ingress
+spec:
+  # apply to Pods with the following label
+  podSelector:
+    matchLabels:
+      pod: timeserver-pod
+  policyTypes:
+  - Ingress
+  ingress:
+  - from:
+    # Allow all cluster traffic
+    - namespaceSelector: {}
