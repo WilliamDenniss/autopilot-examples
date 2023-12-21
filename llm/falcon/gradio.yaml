@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradio
+spec:
+  selector:
+    matchLabels:
+      app: gradio
+  template:
+    metadata:
+      labels:
+        app: gradio
+    spec:
+      containers:
+      - name: gradio
+        image: us-docker.pkg.dev/google-samples/containers/gke/gradio:v0.0.6
+        env:
+          - name: MODEL_URL
+            value: "http://llm-service"
+          - name: MODEL
+            value: "falcon-40b"
+          - name: MAX_TOKENS
+            value: "400"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 7860
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gradio-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: gradio
+  ports:
+  - port: 80
+    targetPort: 7860
