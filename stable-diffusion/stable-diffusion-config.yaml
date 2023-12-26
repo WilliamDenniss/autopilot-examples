@@ -1,0 +1,112 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: stable-diffusion-config
+data:
+  run.sh: |
+    #! /bin/bash
+
+    echo "Dependencies ---------------------------------------------------"
+
+    # Install dependencies
+    apt-get update
+    # required dependencies of stable diffusion
+    apt-get install -y wget git libgl1 libglib2.0-0 google-perftools
+
+    # install other debugging tools
+    apt-get install -y vim
+
+    # Clone stable diiffusion webui
+    cd /app/data
+    git clone https://github.com/AUTOMATIC1111/stable-diffusion-webui
+    cd stable-diffusion-webui
+
+    # Copy the stable diffusion webui user config
+    cp /app/config/webui-user.sh .
+
+    echo "Models ---------------------------------------------------------"
+
+    # Download some stable diffusion models on first run
+    declare -A models
+    declare -A titles
+    titles["v1-5-pruned.ckpt"]="Stable Diffusion 1.5"
+    models["v1-5-pruned.ckpt"]="https://huggingface.co/runwayml/stable-diffusion-v1-5/resolve/main/v1-5-pruned.ckpt"
+    titles["Protogen-V22-Anime.safetensors"]="Protogen v2.2 (Anime)"
+    models["Protogen-V22-Anime.safetensors"]="https://civitai.com/api/download/models/4007"
+    titles["DreamShaper.safetensors"]="DreamShaper"
+    models["DreamShaper.safetensors"]="https://civitai.com/api/download/models/128713?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+    titles["A-Zovya-RPG.safetensors"]="A-Zovya RPG Artist Tools"
+    models["A-Zovya-RPG.safetensors"]="https://civitai.com/api/download/models/79290"
+    titles["Realistic-Vision-V6-0-B1.safetensors"]="Realistic Vision V6.0 B1"
+    models["Realistic-Vision-V6-0-B1.safetensors"]="https://civitai.com/api/download/models/245598?type=Model&format=SafeTensor&size=full&fp=fp16"
+    titles["icbinpICantBelieveIts_lcm.safetensors"]="ICBINP - I Can't Believe It's Not Photography"
+    models["icbinpICantBelieveIts_lcm.safetensors"]="https://civitai.com/api/download/models/253668?type=Model&format=SafeTensor&size=pruned&fp=fp16"
+
+    echo "Downloading models..."
+    cd models/Stable-diffusion
+    for key in "${!models[@]}"; do
+      if [ ! -f $key ]; then
+        echo "Downloading ${titles[$key]}"
+        curl -L "${models[$key]}" > $key
+      else
+        echo "Model ${titles[$key]} ($key) exists, skipping"
+      fi
+    done
+    cd ../../
+
+    echo "Stable Diffusion  ----------------------------------------------"
+
+    # Run the setup & boot
+    # Note: This container runs as the root user, `-f` is needed to run as root 
+    ./webui.sh -f
+
+  webui-user.sh: |
+    #!/bin/bash
+    #########################################################
+    # Uncomment and change the variables below to your need:#
+    #########################################################
+
+    # Install directory without trailing slash
+    #install_dir="/home/$(whoami)"
+
+    # Name of the subdirectory
+    #clone_dir="stable-diffusion-webui"
+
+    # Commandline arguments for webui.py, for example: export COMMANDLINE_ARGS="--medvram --opt-split-attention"
+    export COMMANDLINE_ARGS="--xformers --listen"
+    #export COMMANDLINE_ARGS="--xformers --share --listen"
+
+    # python3 executable
+    #python_cmd="python3"
+
+    # git executable
+    #export GIT="git"
+
+    # python3 venv without trailing slash (defaults to ${install_dir}/${clone_dir}/venv)
+    #venv_dir="venv"
+
+    # script to launch to start the app
+    #export LAUNCH_SCRIPT="launch.py"
+
+    # install command for torch
+    #export TORCH_COMMAND="pip install torch==1.12.1+cu113 --extra-index-url https://download.pytorch.org/whl/cu113"
+
+    # Requirements file to use for stable-diffusion-webui
+    #export REQS_FILE="requirements_versions.txt"
+
+    # Fixed git repos
+    #export K_DIFFUSION_PACKAGE=""
+    #export GFPGAN_PACKAGE=""
+
+    # Fixed git commits
+    #export STABLE_DIFFUSION_COMMIT_HASH=""
+    #export CODEFORMER_COMMIT_HASH=""
+    #export BLIP_COMMIT_HASH=""
+
+    # Uncomment to enable accelerated launch
+    #export ACCELERATE="True"
+
+    # Uncomment to disable TCMalloc
+    #export NO_TCMALLOC="True"
+
+    ###########################################

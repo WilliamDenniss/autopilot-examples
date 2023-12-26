@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: stable-diffusion
+spec:
+  selector:
+    matchLabels:
+      pod: sd
+  serviceName: sd
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        pod: sd
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-l4    
+        cloud.google.com/gke-spot: "true"
+      terminationGracePeriodSeconds: 25
+      containers:
+      - name: cu113-py310-container
+        image: us-docker.pkg.dev/deeplearning-platform-release/gcr.io/base-cu113.py310
+        command: ["/app/config/run.sh"]
+        resources:
+          requests:
+            ephemeral-storage: 10Gi
+            memory: 26Gi
+          limits:
+            nvidia.com/gpu: "1"
+        volumeMounts:
+          - mountPath: /app/data
+            name: sd-pvc
+          - mountPath: /app/config/
+            name: config
+      volumes:
+        # configmap with the 2 configuration files
+        - name: config
+          configMap:
+            name: stable-diffusion-config
+            defaultMode: 0777
+  volumeClaimTemplates:
+  - metadata:
+      name: sd-pvc
+    spec:
+      accessModes:
+        - ReadWriteOnce
+      storageClassName: "premium-rwo"
+      resources:
+        requests:
+          storage: 200Gi
+---
+# Headless service for the above StatefulSet
+apiVersion: v1
+kind: Service
+metadata:
+  name: sd
+spec:
+  ports:
+  - port: 7860
+  clusterIP: None
+  selector:
+    pod: sd
