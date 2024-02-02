@@ -1,0 +1,1 @@
+Autopilot adaptation of https://cloud.google.com/kubernetes-engine/docs/tutorials/serve-multiple-gpu

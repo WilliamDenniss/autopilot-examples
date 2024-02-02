@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llm
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llm
+  template:
+    metadata:
+      labels:
+        app: llm
+    spec:
+      containers:
+      - name: llm
+        image: ghcr.io/huggingface/text-generation-inference:1.1.0
+        resources:
+          limits:
+            nvidia.com/gpu: "2"
+        env:
+        - name: MODEL_ID
+          value: tiiuae/falcon-40b-instruct
+        - name: NUM_SHARD
+          value: "2"
+        - name: PORT
+          value: "8080"
+        - name: QUANTIZE
+          value: bitsandbytes-nf4
+        volumeMounts:
+          - mountPath: /dev/shm
+            name: dshm
+          - mountPath: /data
+            name: data
+      volumes:
+        - name: dshm
+          emptyDir:
+              medium: Memory
+        - name: data
+          ephemeral:
+            volumeClaimTemplate:
+              metadata:
+                labels:
+                  type: data-volume
+              spec:
+                accessModes: [ "ReadWriteOnce" ]
+                storageClassName: "premium-rwo"
+                resources:
+                  requests:
+                    storage: 200Gi
+      nodeSelector:
+        cloud.google.com/compute-class: "Accelerator"
+        cloud.google.com/gke-accelerator: nvidia-l4
+        cloud.google.com/gke-spot: "true"
