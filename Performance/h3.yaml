@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: h3
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: h3-pod
+  template:
+    metadata:
+      labels:
+        pod: h3-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: h3
+      containers:
+      - name: pause-container
+        image: "k8s.gcr.io/pause"
+

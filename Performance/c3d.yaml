@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c3d
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: c3d-pod
+  template:
+    metadata:
+      labels:
+        pod: c3d-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: c3d
+      containers:
+      - name: pause-container
+        image: "k8s.gcr.io/pause"
+

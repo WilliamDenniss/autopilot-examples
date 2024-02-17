@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c3dlssd
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: c3dlssd-pod
+  template:
+    metadata:
+      labels:
+        pod: c3dlssd-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: c3
+        cloud.google.com/gke-ephemeral-storage-local-ssd: "true"
+      containers:
+      - name: pause-container
+        image: "k8s.gcr.io/pause"

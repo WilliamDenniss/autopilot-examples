@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: t2a
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: t2a-pod
+  template:
+    metadata:
+      labels:
+        pod: t2a-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: t2a
+      containers:
+      - name: nginx-container
+        image: nginx

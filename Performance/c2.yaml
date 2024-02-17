@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: c2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: c2-pod
+  template:
+    metadata:
+      labels:
+        pod: c2-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: c2
+      containers:
+      - name: pause-container
+        image: "k8s.gcr.io/pause"

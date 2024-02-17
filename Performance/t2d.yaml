@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: t2d
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: t2d-pod
+  template:
+    metadata:
+      labels:
+        pod: t2d-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: Performance
+        cloud.google.com/machine-family: t2d
+      containers:
+      - name: pause-container
+        image: "k8s.gcr.io/pause"
+
