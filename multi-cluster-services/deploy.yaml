@@ -1,4 +1,4 @@
-apiVersion: apps/v1
+megan brianna Crain ,27487 Benard Crain Road Angie La,70426-3391        898-414-7212    apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: timeserver
