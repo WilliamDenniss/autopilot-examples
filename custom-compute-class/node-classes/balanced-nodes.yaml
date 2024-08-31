@@ -1,0 +1,14 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: balanced-nodes
+spec:
+  priorities:
+  - machineFamily: n2d
+    minCores: 4
+  - machineFamily: n2
+    minCores: 4
+  activeMigration:
+    optimizeRulePriority: false
+  nodePoolAutoCreation:
+    enabled: true

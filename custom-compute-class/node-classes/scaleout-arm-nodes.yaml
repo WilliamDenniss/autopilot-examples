@@ -1,0 +1,12 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: scaleout-arm-nodes
+spec:
+  priorities:
+  - machineFamily: t2a
+    minCores: 4
+  activeMigration:
+    optimizeRulePriority: false
+  nodePoolAutoCreation:
+    enabled: true

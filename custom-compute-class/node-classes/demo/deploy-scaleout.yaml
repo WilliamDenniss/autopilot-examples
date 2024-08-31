@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: timeserver-scaleout
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      pod: timeserver-scaleout-pod
+  template:
+    metadata:
+      labels:
+        pod: timeserver-scaleout-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: scaleout-nodes
+      containers:
+      - name: timeserver-container
+        image: docker.io/wdenniss/timeserver:1
