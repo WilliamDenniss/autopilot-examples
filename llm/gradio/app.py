@@ -3,7 +3,7 @@ import requests
 import json
 import gradio as gr
 
-def stream_vllm(prompt):
+def stream_vllm(user_prompt):
     """A generator function that streams from vLLM and yields partial outputs.
 
     Whenever '</think>' is encountered in the text, we replace it with '<hr>'.
@@ -12,6 +12,14 @@ def stream_vllm(prompt):
     max_tokens = int(os.getenv('MAX_TOKENS', '9999'))
     temperature = float(os.getenv('TEMPERATURE', '0.6'))
     top_p = float(os.getenv('TOP_P', '0.95'))
+
+    # Build an instruction-style system prompt around the user's prompt
+    prompt = (
+        "You are a helpful, honest, and verbose assistant. "
+        "Provide the best possible answer to the user's question. "
+        "If you are uncertain, simply say you don't know.\n\n"
+        f"Question: {user_prompt}\nAnswer:"
+    )
 
     payload = {
         "model": model,
