@@ -1,7 +1,7 @@
 # .build.sh
 # Build script for Docker Hub
 
-TAG=1
+TAG=2
 IMAGE_PATH=docker.io/wdenniss/gradio-demo
 IMAGE_NAME=$IMAGE_PATH:$TAG
 IMAGE_NAME_LATEST=$IMAGE_PATH:latest
