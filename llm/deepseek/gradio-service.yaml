@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: gradio-service
+spec:
+  selector:
+    app: gradio
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 7860
+  type: LoadBalancer

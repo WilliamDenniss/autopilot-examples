@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: vllm
+  template:
+    metadata:
+      labels:
+        app: vllm
+    spec:
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-tesla-a100
+        cloud.google.com/gke-gpu-driver-version: latest
+        cloud.google.com/gke-spot: "true"        
+      containers:
+      - name: vllm-container
+        image: vllm/vllm-openai:latest
+        command: ["python3", "-m", "vllm.entrypoints.openai.api_server"]
+        args:
+        - --model=$(MODEL_ID)
+        - --trust-remote-code
+        ports:
+        - containerPort: 8000
+        env:
+        - name: MODEL_ID
+          value: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-secret
+              key: hf_api_token
+        resources:
+          limits:
+            nvidia.com/gpu: 1
+        volumeMounts:
+        - name: hf-cache
+          mountPath: /root/.cache/huggingface
+      volumes:
+      - name: hf-cache
+        emptyDir: {}

@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gradio-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gradio
+  template:
+    metadata:
+      labels:
+        app: gradio
+    spec:
+      containers:
+      - name: gradio-container
+        image: wdenniss/gradio-demo:latest
+        ports:
+        - containerPort: 7860
+        env:
+        - name: MODEL_ID
+          value: deepseek-ai/DeepSeek-R1-Distill-Llama-8B
+        - name: MAX_TOKENS
+          value: "9000"
+        - name: PYTHONUNBUFFERED
+          value: "1"
