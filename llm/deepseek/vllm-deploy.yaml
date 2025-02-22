@@ -14,8 +14,8 @@ spec:
     spec:
       nodeSelector:
         cloud.google.com/gke-accelerator: nvidia-l4
-        cloud.google.com/gke-gpu-driver-version: latest
         cloud.google.com/gke-spot: "true"        
+        cloud.google.com/gke-gpu-driver-version: latest
       containers:
       - name: vllm-container
         image: vllm/vllm-openai:v0.7.0
