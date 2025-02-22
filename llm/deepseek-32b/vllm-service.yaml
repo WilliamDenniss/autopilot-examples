@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: vllm-service
+spec:
+  selector:
+    app: vllm
+  ports:
+    - protocol: TCP
+      port: 8000
+      targetPort: 8000
