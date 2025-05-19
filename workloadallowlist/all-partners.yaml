@@ -1,0 +1,16 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: all-partners
+spec:
+  allowlistPaths:
+  - "CrowdStrike/falcon-sensor/*"
+  - "Datadog/datadog/*"
+  - "Dynatrace/csidriver/*"
+  - "Dynatrace/csijob/*"
+  - "Dynatrace/logmonitoring/*"
+  - "Orca-Security/orca-allowlist/*"
+  - "Palo-Alto-Networks/prisma-cloud-defender/*"
+  - "Sysdig/agent/*"
+  - "Upwind/upwind-agent/*"
+  - "Wiz/wiz-sensor/*"
