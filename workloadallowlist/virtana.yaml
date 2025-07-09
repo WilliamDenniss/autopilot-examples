@@ -1,0 +1,8 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: virtana
+spec:
+  allowlistPaths:
+  - "Virtana/node-exporter/*"
+  - "Virtana/cadvisor/*"
