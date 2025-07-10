@@ -1,0 +1,7 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: crowdstrike
+spec:
+  allowlistPaths:
+  - "CrowdStrike/falcon-sensor/*"

@@ -1,0 +1,7 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: upwind
+spec:
+  allowlistPaths:
+  - "Upwind/upwind-agent/*"

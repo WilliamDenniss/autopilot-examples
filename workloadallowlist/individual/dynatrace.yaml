@@ -1,0 +1,9 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: dynatrace
+spec:
+  allowlistPaths:
+  - "Dynatrace/csidriver/*"
+  - "Dynatrace/csijob/*"
+  - "Dynatrace/logmonitoring/*"

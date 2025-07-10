@@ -1,0 +1,7 @@
+apiVersion: auto.gke.io/v1
+kind: AllowlistSynchronizer
+metadata:
+  name: palo-alto-networks
+spec:
+  allowlistPaths:
+  - "Palo-Alto-Networks/prisma-cloud-defender/*"
