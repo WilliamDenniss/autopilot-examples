@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-x86
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: nginx-x86-pod
+  template:
+    metadata:
+      labels:
+        pod: nginx-x86-pod
+    spec:
+      nodeSelector:
+        cloud.google.com/compute-class: c4d
+      containers:
+      - name: nginx-container
+        image: nginx
+        resources:
+          requests:
+            cpu: 40m
+            memory: 40Mi
+            ephemeral-storage: 100Mi

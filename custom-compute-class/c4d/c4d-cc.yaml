@@ -1,0 +1,8 @@
+apiVersion: cloud.google.com/v1
+kind: ComputeClass
+metadata:
+  name: c4d
+spec:
+  priorities:
+  - machineFamily: c4d
+    minCores: 4
