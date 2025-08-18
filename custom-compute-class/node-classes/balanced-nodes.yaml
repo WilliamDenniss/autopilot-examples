@@ -12,3 +12,4 @@ spec:
     optimizeRulePriority: false
   nodePoolAutoCreation:
     enabled: true
+  whenUnsatisfiable: DoNotScaleUp
