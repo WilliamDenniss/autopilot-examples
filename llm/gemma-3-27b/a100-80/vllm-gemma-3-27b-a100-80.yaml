@@ -1,0 +1,56 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-gemma-3-27b-a100-80
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: vllm-gemma-3-27b-a100-80
+  template:
+    metadata:
+      labels:
+        pod: vllm-gemma-3-27b-a100-80
+        model: gemma-3-27b-it
+    spec:
+      containers:
+      - name: inference-server
+        image: docker.io/vllm/vllm-openai:latest
+        resources:
+          requests:
+            cpu: "10"
+            memory: "128Gi"
+            ephemeral-storage: "120Gi"
+            nvidia.com/gpu : "1"
+          limits:
+            cpu: "10"
+            memory: "128Gi"
+            ephemeral-storage: "120Gi"
+            nvidia.com/gpu : "1"
+        command: ["vllm", "serve", "google/gemma-3-27b-it"]
+        args:
+        - --tensor-parallel-size=1
+        - --max-model-len=32768
+        - --gpu-memory-utilization=0.95
+        - --max-num-seqs=16
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-secret
+              key: hf_api_token
+#        - name: VLLM_LOGGING_LEVEL
+#          value: "DEBUG"
+        - name: LD_LIBRARY_PATH
+          value: "/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+      volumes:
+      - name: dshm
+        emptyDir:
+            medium: Memory
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-a100-80gb
+        cloud.google.com/gke-gpu-driver-version: latest
+        cloud.google.com/gke-spot: "true"

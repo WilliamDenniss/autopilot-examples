@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: vllm-gemma-27b-l4
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      pod: vllm-gemma-27b-l4
+  template:
+    metadata:
+      labels:
+        pod: vllm-gemma-27b-l4
+        model: gemma-3-27b-it
+    spec:
+      containers:
+      - name: inference-server
+        image: docker.io/vllm/vllm-openai:latest
+        resources:
+          requests:
+            cpu: "10"
+            ephemeral-storage: "120Gi"
+            nvidia.com/gpu: "4"
+          limits:
+            nvidia.com/gpu: "4"
+        command: ["vllm", "serve", "google/gemma-3-27b-it"]
+        args:
+        - --tensor-parallel-size=4
+        - --gpu-memory-utilization=0.98
+        - --max-model-len=4096
+        - --max-num-seqs=16
+        env:
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-secret
+              key: hf_api_token
+        - name: LD_LIBRARY_PATH
+          value: "/usr/local/nvidia/lib64:/usr/local/cuda/lib64"
+#        - name: VLLM_LOGGING_LEVEL
+#          value: "DEBUG"
+        volumeMounts:
+        - mountPath: /dev/shm
+          name: dshm
+      volumes:
+      - name: dshm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 150Gi
+      nodeSelector:
+        cloud.google.com/gke-accelerator: nvidia-l4
+        cloud.google.com/gke-gpu-driver-version: latest
+        cloud.google.com/gke-spot: "true"
